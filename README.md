@@ -49,6 +49,12 @@ customer.website_id = 1
 customer.create
 #=> true
 ```
+Delete a customer
+```ruby
+customer = Magenthor::Customer.find 1
+customer.delete
+#=> true
+```
 
 ## Contributing
 
