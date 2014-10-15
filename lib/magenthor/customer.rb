@@ -14,6 +14,9 @@ module Magenthor
         #TODO: better description
         #Initialize a new customer entity
         def initialize params = {}
+            methods.grep(/\w=$/).each do |m|
+                send(m, nil)
+            end
             params.each do |k, v|
                 send("#{k}=", v) if respond_to? "#{k}="
             end
