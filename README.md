@@ -33,7 +33,13 @@ Magenthor::Customer.find_by_email "email@me.tld"
 Magenthor::Customer.find_by_group_id 2
 #Magenthor::Customer.find_by_[magento customer attribute]
 ```
-
+Update a customer attributes
+```ruby
+customer = Magenthor::Customer.find 1
+customer.firstname = "John"
+customer.update
+#=> true
+```
 
 ## Contributing
 
