@@ -25,6 +25,8 @@ module Magenthor
             
         end
         
+        #TODO: better description
+        #Update an existing customer
         def update
             attributes = {}
             methods.grep(/\w=$/).each do |m|
@@ -32,7 +34,9 @@ module Magenthor
             end
             self.class.commit('customer.update', [self.customer_id, attributes])
         end
-        
+
+        #TODO: better description
+        #Create a new customer
         def create
             attributes = {}
             methods.grep(/\w=$/).each do |m|
@@ -51,7 +55,25 @@ module Magenthor
             self.updated_at = obj.updated_at
             self.password_hash = obj.password_hash
 
-            return true if response != false
+            return true
+        end
+
+        #TODO: better description
+        #Delete an existing customer
+        def delete
+            response = self.class.commit('customer.delete', [self.customer_id])
+            return false if response == false
+
+            methods.grep(/\w=$/).each do |m|
+                send(m, nil)
+            end
+            self.customer_id = nil
+            self.increment_id = nil
+            self.created_at = nil
+            self.updated_at = nil
+            self.password_hash = nil
+
+            return true
         end
 
         class << self
