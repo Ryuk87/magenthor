@@ -3,7 +3,7 @@ module Magenthor
         
         attr_accessor :firstname, :lastname, :middlename, :increment_id, :store_id, 
                     :website_id, :created_in, :email, :group_id, :prefix, :suffix, :dob,
-                    :taxvat, :confirmation, :gender
+                    :taxvat, :confirmation, :gender, :password
         attr_reader :customer_id, :increment_id, :created_at, :updated_at, :password_hash
         
         private
@@ -33,6 +33,27 @@ module Magenthor
             self.class.commit('customer.update', [self.customer_id, attributes])
         end
         
+        def create
+            attributes = {}
+            methods.grep(/\w=$/).each do |m|
+                attributes[m.to_s.gsub('=','')] = send(m.to_s.gsub('=',''))
+            end
+            response = self.class.commit('customer.create', [attributes])
+            return false if response == false
+
+            obj = self.class.find(response)
+            methods.grep(/\w=$/).each do |m|
+                send(m, obj.send(m.to_s.gsub('=','')))
+            end
+            self.customer_id = obj.customer_id
+            self.increment_id = obj.increment_id
+            self.created_at = obj.created_at
+            self.updated_at = obj.updated_at
+            self.password_hash = obj.password_hash
+
+            return true if response != false
+        end
+
         class << self
             #TODO: better description
             #List al customers with all info
@@ -74,13 +95,7 @@ module Magenthor
                     find_by a, arg
                 end
             end
-            
-            #TODO: better description
-            #Create a new customer on Magento
-            def create attributes
-                commit('customer.create', attributes)
-            end
-            
+
             
             private
             
