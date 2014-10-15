@@ -40,6 +40,15 @@ customer.firstname = "John"
 customer.update
 #=> true
 ```
+Create a new customer
+```ruby
+customer = Magenthor::Customer.new
+customer.email = "email@me.tld"
+customer.password = "p4ssw0rd"
+customer.website_id = 1
+customer.create
+#=> true
+```
 
 ## Contributing
 
