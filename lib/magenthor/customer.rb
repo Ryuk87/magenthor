@@ -124,8 +124,16 @@ module Magenthor
             #TODO: better description
             #Method to find customers based on a specific Magento attribute
             def find_by (attribute, value)
-                response = commit('customer.info', [attribute => value])
-                new(response) unless response == false
+                response = commit('customer.list', [attribute => value])
+                if response.count > 1
+                    customers = []
+                    response.each do |r|
+                        customers << find(r["customer_id"])
+                    end
+                    return customers
+                else
+                    return new(response[0])
+                end
             end
         end
     end
