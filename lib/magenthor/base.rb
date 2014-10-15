@@ -2,7 +2,6 @@ module Magenthor
     class Base
         @@client = nil
         @@session_id = nil
-        @@magento_path = '/api/xmlrpc'
         @@api_user = nil
         @@api_key = nil
         
@@ -16,6 +15,7 @@ module Magenthor
     
             @@api_user = params[:api_user]
             @@api_key = params[:api_key]
+            url = "http://#{params[:host]}:#{params[:port]}/api/xmlrpc"
             
             @@client = XMLRPC::Client.new2(url)
             @@client.http_header_extra = { "accept-encoding" => "identity" }
@@ -23,25 +23,40 @@ module Magenthor
         
         private
         
+        #TODO: better description
         def self.login
-            @@session_id = @@client.call('login', @@api_user, @@api_key)
+            begin
+                @@session_id = @@client.call('login', @@api_user, @@api_key)
+                return true
+            rescue => e
+                if e.class == NoMethodError
+                    puts 'You must first set the connection parameters using Magenthor::Base.new'
+                    return false
+                end
+            end
         end
         
+        #TODO: better description
         def self.logout
             response = @@client.call('endSession', @@session_id)
             @@session_id = nil
-            response
         end
-
+        
+        #TODO: better description
         def self.commit resource_path, params
             if params.class == Hash
                 params = [params]   #Magento wants an Array, always!
             end
             
-            login
-            response = @@client.call('call', @@session_id, resource_path, params)
-            logout
-            response
+            if login
+                begin
+                    @@client.call('call', @@session_id, resource_path, params)
+                rescue => e
+                    binding.pry
+                ensure
+                    logout
+                end
+            end
         end
     end
 end
