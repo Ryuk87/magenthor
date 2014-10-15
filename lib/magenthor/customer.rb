@@ -11,8 +11,9 @@ module Magenthor
         
         public
         
+        #TODO: better description
+        #Initialize a new customer entity
         def initialize params = {}
-            binding.pry
             params.each do |k, v|
                 send("#{k}=", v) if respond_to? "#{k}="
             end
@@ -22,6 +23,14 @@ module Magenthor
             self.updated_at = params["updated_at"]
             self.password_hash = params["password_hash"]
             
+        end
+        
+        def update
+            attributes = {}
+            methods.grep(/\w=$/).each do |m|
+                attributes[m.to_s.gsub('=','')] = send(m.to_s.gsub('=',''))
+            end
+            self.class.commit('customer.update', [self.customer_id, attributes])
         end
         
         class << self
