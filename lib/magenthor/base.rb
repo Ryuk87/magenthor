@@ -52,7 +52,10 @@ module Magenthor
                 begin
                     @@client.call('call', @@session_id, resource_path, params)
                 rescue => e
-                    binding.pry
+                    if e.class == XMLRPC::FaultException
+                        puts "Magento says: #{e.message}"
+                    end
+                    return false
                 ensure
                     logout
                 end
