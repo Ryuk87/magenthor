@@ -4,13 +4,13 @@ module Magenthor
             #TODO: better description
             #List al customers
             def list filters = []
-                response = commit('customer.list', filters)
+                commit('customer.list', filters)
             end
             
             #TODO: better description
             #Find a customer by id
             def find customer_id
-                response = commit('customer.info', [customer_id])
+                commit('customer.info', [customer_id])
             end
             
             #TODO: better description
@@ -46,7 +46,7 @@ module Magenthor
             #TODO: better description
             #Create a new customer
             def create attributes
-                response = commit('customer.create', attributes)
+                commit('customer.create', attributes)
             end
             
             
@@ -54,9 +54,9 @@ module Magenthor
             private
             
             #TODO: better description
-            #Method to find customers based on a specific Magento attributes
+            #Method to find customers based on a specific Magento attribute
             def find_by (attribute, value)
-                response = commit('customer.info', [attribute => value])
+                commit('customer.info', [attribute => value])
             end
         end
     end
