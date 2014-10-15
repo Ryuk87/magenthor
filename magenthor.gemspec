@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Magenthor::VERSION
   spec.authors       = ["Daniele Lenares"]
   spec.email         = ["daniele.lenares@gmail.com"]
-  spec.summary       = %q{A Rubygem wrapper for the XMLRC Magento API.}
-  spec.description   = %q{A Rubygem wrapper for the XMLRC Magento API.}
+  spec.summary       = %q{A Rubygem wrapper for the XMLRPC Magento API.}
+  spec.description   = %q{A Rubygem wrapper for the XMLRPC Magento API.}
   spec.homepage      = "https://github.com/Ryuk87/magenthor"
   spec.license       = "MIT"
 

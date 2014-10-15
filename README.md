@@ -1,6 +1,6 @@
 # Magenthor (ALPHA)
 
-A Rubygem wrapper for the XMLRC Magento API.
+A Rubygem wrapper for the XMLRPC Magento API.
 
 This code is inspired by, but not based on, [magentor gem](https://github.com/pstuteville/magentor)
 
