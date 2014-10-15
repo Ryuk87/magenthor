@@ -27,7 +27,7 @@ Find a customer by ID
 ```ruby
 Magenthor::Customer.find 1
 ```
-Find a customer by Magento attributes
+Find customers by Magento attribute
 ```ruby
 Magenthor::Customer.find_by_email "email@me.tld"
 Magenthor::Customer.find_by_group_id 2
