@@ -1,3 +1,4 @@
+# @author Daniele Lenares
 module Magenthor
     class Base
         @@client = nil
@@ -5,13 +6,17 @@ module Magenthor
         @@api_user = nil
         @@api_key = nil
         
-        #TODO: better description
-        #Intializer for setting up connection. Params required: host/port/api_user/api_key
+        # Initialize the constants that will be used to make the connection to Magento
+        #
+        # @param params [Hash] contains the paramters needed for connection
+        # @return [TrueClass, FalseClass] true if all params are present, false otherwise
         def initialize params
             if params.class != Hash
                 puts "Parameters Error!"
                 return false
             end
+
+            # @todo: check for required parameters
     
             @@api_user = params[:api_user]
             @@api_key = params[:api_key]
@@ -23,7 +28,9 @@ module Magenthor
         
         private
         
-        #TODO: better description
+        # Login to Magento using the parameters setted on #initialize
+        #
+        # @return [TrueClass, FalseClass] true if login successful or false
         def self.login
             begin
                 @@session_id = @@client.call('login', @@api_user, @@api_key)
@@ -36,16 +43,20 @@ module Magenthor
             end
         end
         
-        #TODO: better description
+        # End the current Magento api session
         def self.logout
             response = @@client.call('endSession', @@session_id)
             @@session_id = nil
         end
         
-        #TODO: better description
+        # Call the Magento Api resource passing parameters
+        #
+        # @param resource_path [String] the Magento Api resource path to call
+        # @param params [Hash, Array] the paramters needed for the call
+        # @return [Array, FalseClass] the result set if the call is successful or false
         def self.commit resource_path, params
             if params.class == Hash
-                params = [params]   #Magento wants an Array, always!
+                params = [params]   # Magento wants an Array, always!
             end
             
             if login

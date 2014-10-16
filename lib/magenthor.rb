@@ -1,3 +1,4 @@
+# @author Daniele Lenares
 require "magenthor/version"
 require "magenthor/base"
 require "xmlrpc/client"

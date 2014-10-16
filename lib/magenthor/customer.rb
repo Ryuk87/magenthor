@@ -1,3 +1,4 @@
+# @author Daniele Lenares
 module Magenthor
     class Customer < Base
         
@@ -11,8 +12,10 @@ module Magenthor
         
         public
         
-        #TODO: better description
-        #Initialize a new customer entity
+        # Initialize a new Customer entity
+        #
+        # @param params [Hash] the to save in the instance on initialization
+        # @return [Magenthor::Customer] a new instance of Customer
         def initialize params = {}
             methods.grep(/\w=$/).each do |m|
                 send(m, nil)
@@ -28,18 +31,20 @@ module Magenthor
             
         end
         
-        #TODO: better description
-        #Update an existing customer
+        # Save on Magento the updates on the local Customer
         def update
             attributes = {}
             methods.grep(/\w=$/).each do |m|
                 attributes[m.to_s.gsub('=','')] = send(m.to_s.gsub('=',''))
             end
             self.class.commit('customer.update', [self.customer_id, attributes])
+
+            # @todo: set true or false if successfull or error
         end
 
-        #TODO: better description
-        #Create a new customer
+        # Create on Magento the local Customer
+        #
+        # @return [TrueClass, FalseClass] true if successful or false
         def create
             attributes = {}
             methods.grep(/\w=$/).each do |m|
@@ -61,8 +66,9 @@ module Magenthor
             return true
         end
 
-        #TODO: better description
-        #Delete an existing customer
+        # Remove from Magento the local Customer
+        #
+        # @return [TrueClass, FalseClass] true if successful or false
         def delete
             response = self.class.commit('customer.delete', [self.customer_id])
             return false if response == false
@@ -80,8 +86,11 @@ module Magenthor
         end
 
         class << self
-            #TODO: better description
-            #List al customers with all info
+
+            # Retrieve the list of all Magento customers with or without filters
+            #
+            # @param filters [Array] the filters by customer attributes
+            # @return [Array<Magenthor::Customer>] the list of all customers as Customer entities
             def list filters = []
                 response = commit('customer.list', filters)
                 customers = []
@@ -91,15 +100,16 @@ module Magenthor
                 return customers
             end
             
-            #TODO: better description
-            #Find a customer by id
+            # Find a specific Customer by Magento ID
+            #
+            # @param customer_id [String, Integer] the id of the customer to retrieve
+            # @return [Magenthor::Customer, FalseClass] the customer entity or false if not found
             def find customer_id
                 response = commit('customer.info', [customer_id])
                 new(response) unless response == false
             end
             
-            #TODO: better description
-            #Dynamic methods to find customers based on Magento attributes
+            # Magento Customer Attributes
             customer_attributes = [
                 "increment_id",
                 "created_in",
@@ -116,6 +126,7 @@ module Magenthor
                 "taxvat",
                 "confirmation"]
             customer_attributes.each do |a|
+                # Dynamic methods to find customers based on Magento attributes
                 define_method("find_by_#{a}") do |arg|
                     find_by a, arg
                 end
@@ -124,8 +135,11 @@ module Magenthor
             
             private
             
-            #TODO: better description
-            #Method to find customers based on a specific Magento attribute
+            # Method to find customers based on a specific Magento attribute, used to create the dynamic methods
+            #
+            # @param attribute [String] the attribute used to make the search
+            # @param value [String, Integer] the value of the attribute
+            # @return [Array<Magenthor::Customer>, Magenthor::Customer] the list of customer entities or a single customer entity
             def find_by (attribute, value)
                 response = commit('customer.list', [attribute => value])
                 if response.count > 1
