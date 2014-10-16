@@ -1,22 +1,27 @@
 # @author Daniele Lenares
 module Magenthor
     class Base
+
         @@client = nil
         @@session_id = nil
         @@api_user = nil
         @@api_key = nil
         
+
         # Initialize the constants that will be used to make the connection to Magento
         #
         # @param params [Hash] contains the paramters needed for connection
-        # @return [TrueClass, FalseClass] true if all params are present, false otherwise
-        def initialize params
+        # @return [Magenthor::Base]
+        def self.setup params
             if params.class != Hash
-                puts "Parameters Error!"
+                puts "Parameters must be in an Hash."
                 return false
             end
 
-            # @todo: check for required parameters
+            if !params.key? :host or !params.key? :api_user or !params.key? :api_key
+                puts "Mandatory parameter missing. Check if :host, :api_user and :api_key are there."
+                return false
+            end
     
             @@api_user = params[:api_user]
             @@api_key = params[:api_key]
@@ -24,6 +29,8 @@ module Magenthor
             
             @@client = XMLRPC::Client.new2(url)
             @@client.http_header_extra = { "accept-encoding" => "identity" }
+
+            return true
         end
         
         private
@@ -37,7 +44,7 @@ module Magenthor
                 return true
             rescue => e
                 if e.class == NoMethodError
-                    puts 'You must first set the connection parameters using Magenthor::Base.new'
+                    puts 'You must first set the connection parameters using Magenthor::Base.setup'
                     return false
                 end
             end
@@ -70,6 +77,8 @@ module Magenthor
                 ensure
                     logout
                 end
+            else
+                return false
             end
         end
     end

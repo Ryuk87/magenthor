@@ -32,14 +32,14 @@ module Magenthor
         end
         
         # Save on Magento the updates on the local Customer
+        #
+        # @return [TrueCalss, FalseClass] true if successful or false
         def update
             attributes = {}
             methods.grep(/\w=$/).each do |m|
                 attributes[m.to_s.gsub('=','')] = send(m.to_s.gsub('=',''))
             end
             self.class.commit('customer.update', [self.customer_id, attributes])
-
-            # @todo: set true or false if successfull or error
         end
 
         # Create on Magento the local Customer
@@ -90,9 +90,10 @@ module Magenthor
             # Retrieve the list of all Magento customers with or without filters
             #
             # @param filters [Array] the filters by customer attributes
-            # @return [Array<Magenthor::Customer>] the list of all customers as Customer entities
+            # @return [Array<Magenthor::Customer>, FalseClass] the list of all customers as Customer entities or false
             def list filters = []
                 response = commit('customer.list', filters)
+                return false if response == false
                 customers = []
                 response.each do |r|
                     customers << find(r["customer_id"])
@@ -132,6 +133,13 @@ module Magenthor
                 end
             end
 
+            # Get the list of all Magento customer groups
+            #
+            # @return [Array, FalseClass] the list of all customer groups or false
+            def groups
+                commit('customer_group.list',  [])
+            end
+
             
             private
             
@@ -139,9 +147,10 @@ module Magenthor
             #
             # @param attribute [String] the attribute used to make the search
             # @param value [String, Integer] the value of the attribute
-            # @return [Array<Magenthor::Customer>, Magenthor::Customer] the list of customer entities or a single customer entity
+            # @return [Array<Magenthor::Customer>, Magenthor::Customer, FalseClass] the list of customer entities or a single customer entity or false
             def find_by (attribute, value)
                 response = commit('customer.list', [attribute => value])
+                return false if response == false
                 if response.count > 1
                     customers = []
                     response.each do |r|
