@@ -12,7 +12,7 @@ Since this is still in an early stage of development, I discourage the installat
 
 Initialize the connection
 ```ruby
-Magenthor::Base.new({
+Magenthor::Base.setup({
     :port => 80,
     :host => 'magentohost.tld',
     :api_user => 'apiuser',
