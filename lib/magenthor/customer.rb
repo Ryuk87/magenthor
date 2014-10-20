@@ -33,7 +33,7 @@ module Magenthor
         
         # Save on Magento the updates on the local Customer
         #
-        # @return [TrueCalss, FalseClass] true if successful or false
+        # @return [TrueClass, FalseClass] true if successful or false
         def update
             attributes = {}
             methods.grep(/\w=$/).each do |m|
