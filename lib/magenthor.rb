@@ -10,4 +10,6 @@ XMLRPC::Config.send(:const_set, :ENABLE_NIL_CREATE, true)
 
 module Magenthor
     autoload :Customer, 'magenthor/customer'
+    autoload :Catalog, 'magenthor/catalog'
+    autoload :Product, 'magenthor/product'
 end
