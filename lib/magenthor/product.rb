@@ -61,7 +61,23 @@ module Magenthor
             return true
         end
 
+        # Delete from Magento the local product
+        #
+        # @return [TrueClass, FalseClass] true if successful or false
+        def delete
+            response = self.class.commit('catalog_product.delete', [self.product_id])
+            return false if response == false
+
+            methods.grep(/\w=$/).each do |m|
+                send(m, nil)
+            end
+            self.product_id = nil
+
+            return true
+        end
+
         class << self
+
             # Retrieve the list of Magento product based on filters and store view
             #
             # @param filters [Array] array of filters by attributes
@@ -92,6 +108,7 @@ module Magenthor
                 end
                 return obj
             end
+
         end
     end
 end
