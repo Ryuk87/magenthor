@@ -15,7 +15,7 @@ module Magenthor
             # @param set_id [String, Integer] the set id to get the attributes from
             # @return [Array] a list of all attributes of the set
             def attribute_list set_id
-                commit('catalog_product_attribute.list', ["setId" => set_id])
+                commit('catalog_product_attribute.list', [set_id])
             end
         end
 
