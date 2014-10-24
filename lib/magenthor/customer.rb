@@ -129,7 +129,7 @@ module Magenthor
             customer_attributes.each do |a|
                 # Dynamic methods to find customers based on Magento attributes
                 define_method("find_by_#{a}") do |arg|
-                    find_by a, arg
+                    list({a.to_sym => arg})
                 end
             end
 
@@ -140,27 +140,6 @@ module Magenthor
                 commit('customer_group.list',  [])
             end
 
-            
-            private
-            
-            # Method to find customers based on a specific Magento attribute, used to create the dynamic methods
-            #
-            # @param attribute [String] the attribute used to make the search
-            # @param value [String, Integer] the value of the attribute
-            # @return [Array<Magenthor::Customer>, Magenthor::Customer, FalseClass] the list of customer entities or a single customer entity or false
-            def find_by (attribute, value)
-                response = commit('customer.list', [attribute => value])
-                return false if response == false
-                if response.count > 1
-                    customers = []
-                    response.each do |r|
-                        customers << find(r["customer_id"])
-                    end
-                    return customers
-                else
-                    return new(response[0])
-                end
-            end
         end
     end
 end
