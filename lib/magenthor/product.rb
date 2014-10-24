@@ -109,6 +109,20 @@ module Magenthor
                 return obj
             end
 
+            products_attributes = [
+                "sku",
+                "set",
+                "type",
+                "name",
+                "status",
+                "visibility"]
+            products_attributes.each do |a|
+                # Dynamic methods to find products based on Magento attributes
+                define_method("find_by_#{a}") do |arg|
+                    list({a.to_sym => arg})
+                end
+            end
+
         end
     end
 end
