@@ -6,7 +6,9 @@ This code is inspired by, but not based on, [magentor gem](https://github.com/ps
 
 ## Installation
 
-Since this is still in an early stage of development, I discourage the installation except for debugging (or curiosity) purposes
+    $ gem install magenthor
+    
+This gem is still in an early stage of development and I discourage the installation except for debugging (or curiosity) purposes.
 
 ## Usage
 
